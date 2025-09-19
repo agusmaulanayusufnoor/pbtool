@@ -4,11 +4,11 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Button } from '@/components/ui/button';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Form } from '@/components/ui/form';
 import { FormInput } from './form-input';
 import { FormSelect } from './form-select';
-import { useState, useEffect } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { useState } from 'react';
 
 const schema = z.object({
   amount: z
@@ -29,17 +29,19 @@ interface GenerateFormProps {
     email: string;
   } | null;
   userEmail?: string;
+  defaultFunction?: string;
 }
 
 const functionOptions = [
-  { value: '01', label: '01 - New Limit' },
-  { value: '02', label: '02 - Settlement amount' }
+  { value: '02', label: '02 - Settlement amount' },
+  { value: '01', label: '01 - New Limit' }
 ];
 
 export default function GenerateForm({
   onGenerated,
   initialData,
-  userEmail
+  userEmail,
+  defaultFunction = '02'
 }: GenerateFormProps) {
   const [message, setMessage] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -48,22 +50,9 @@ export default function GenerateForm({
     resolver: zodResolver(schema),
     defaultValues: {
       amount: '',
-      function: ''
+      function: defaultFunction
     }
   });
-
-  // Format timestamp untuk Indonesia
-  const formatTimestamp = () => {
-    const now = new Date();
-    const day = String(now.getDate()).padStart(2, '0');
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const year = now.getFullYear();
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-    const seconds = String(now.getSeconds()).padStart(2, '0');
-
-    return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
-  };
 
   // Format timestamp untuk CDC file
   const formatCDCTimestamp = () => {
@@ -85,7 +74,7 @@ export default function GenerateForm({
   // Format filename sesuai aturan
   const formatFileName = (code: string) => {
     const now = new Date();
-    const year = String(now.getFullYear()).slice(-2); // 2 digit tahun
+    const year = String(now.getFullYear()).slice(-2);
     const month = String(now.getMonth() + 1).padStart(2, '0');
     const day = String(now.getDate()).padStart(2, '0');
     const hours = String(now.getHours()).padStart(2, '0');
@@ -110,7 +99,7 @@ export default function GenerateForm({
       email: userEmail,
       userId: initialData.userId,
       cardNumber: initialData.cardNumber,
-      fileName: initialData.userId, // Gunakan User ID sebagai fileName
+      fileName: initialData.userId,
       amount: values.amount,
       function: values.function,
       timestamp: cdcTimestamp,
@@ -183,11 +172,8 @@ export default function GenerateForm({
           </p>
         </div>
 
-        <Form
-          form={form}
-          onSubmit={form.handleSubmit(onSubmit)}
-          className='space-y-8'
-        >
+        {/* Perbaikan: Mengubah onSubmit ke onSubmit */}
+        <Form form={form} onSubmit={onSubmit} className='space-y-6'>
           <FormSelect
             control={form.control}
             name='function'
@@ -216,6 +202,7 @@ export default function GenerateForm({
           >
             {isGenerating ? 'Generating...' : 'Generate'}
           </Button>
+          
           {message && (
             <div
               className={`mt-2 text-sm ${

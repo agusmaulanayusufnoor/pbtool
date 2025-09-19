@@ -26,7 +26,7 @@ body {
   }
 }
 
-.theme-default,
+/* .theme-default,
 .theme-default-scaled {
   --primary: var(--color-neutral-600);
   --primary-foreground: var(--color-neutral-50);
@@ -34,6 +34,17 @@ body {
   @variant dark {
     --primary: var(--color-neutral-500);
     --primary-foreground: var(--color-neutral-50);
+  }
+} */
+
+.theme-default,
+.theme-default-scaled {
+  --primary: var(--color-teal-400);
+  --primary-foreground: var(--color-white);
+
+  @variant dark {
+    --primary: var(--color-teal-500);
+    --primary-foreground: var(--color-white);
   }
 }
 

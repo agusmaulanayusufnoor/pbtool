@@ -47,7 +47,7 @@ export default function UserAuthForm() {
     <>
       <Form
         form={form}
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={onSubmit} // Mengubah ini dari form.handleSubmit(onSubmit)
         className='w-full space-y-2'
       >
         <FormInput

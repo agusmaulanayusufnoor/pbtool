@@ -79,7 +79,31 @@ export default function GeneratePage() {
     if (generateResult?.generatedText) {
       navigator.clipboard.writeText(generateResult.generatedText);
       alert('Text berhasil disalin ke clipboard!');
+    } else {
+      alert('Tidak ada teks untuk disalin');
     }
+  };
+
+  const downloadFile = () => {
+    if (!generateResult?.generatedText) {
+      alert('Tidak ada teks untuk didownload');
+      return;
+    }
+    
+    const blob = new Blob(
+      [generateResult.generatedText],
+      { type: 'text/plain' }
+    );
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download =
+      generateResult.fileName ||
+      `cdc_${new Date().toISOString().slice(0, 10)}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   useEffect(() => {
@@ -117,6 +141,7 @@ export default function GeneratePage() {
               onGenerated={handleGenerated}
               initialData={setting}
               userEmail={userEmail}
+              defaultFunction="02" // Default value untuk combobox function
             />
 
             {!setting && !loading && (
@@ -160,28 +185,15 @@ export default function GeneratePage() {
                           onClick={copyToClipboard}
                           variant='outline'
                           className='w-full'
+                          disabled={!generateResult.generatedText}
                         >
                           Salin ke Clipboard
                         </Button>
                         <Button
-                          onClick={() => {
-                            const blob = new Blob(
-                              [generateResult.generatedText],
-                              { type: 'text/plain' }
-                            );
-                            const url = URL.createObjectURL(blob);
-                            const a = document.createElement('a');
-                            a.href = url;
-                            a.download =
-                              generateResult.fileName ||
-                              `cdc_${new Date().toISOString().slice(0, 10)}.txt`;
-                            document.body.appendChild(a);
-                            a.click();
-                            document.body.removeChild(a);
-                            URL.revokeObjectURL(url);
-                          }}
+                          onClick={downloadFile}
                           variant='default'
                           className='w-full'
+                          disabled={!generateResult.generatedText}
                         >
                           Download File
                         </Button>
@@ -252,7 +264,7 @@ export default function GeneratePage() {
                     <span className='font-medium'>Function:</span>
                     <ul className='mt-1 ml-4 space-y-1 text-xs'>
                       <li>• 01 - New Limit</li>
-                      <li>• 02 - Settlement amount</li>
+                      <li>• <strong>02 - Settlement amount (Default)</strong></li>
                     </ul>
                   </div>
                   <div>
@@ -265,6 +277,7 @@ export default function GeneratePage() {
                     <p className='mt-1 text-xs text-gray-500'>
                       * File Name (USERID123) diambil dari User ID di setting
                       <br />* Nama file: FGUSERID1232509191635.txt
+                   
                     </p>
                   </div>
                 </div>

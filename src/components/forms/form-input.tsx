@@ -21,6 +21,7 @@ interface FormInputProps<
   step?: string | number;
   min?: string | number;
   max?: string | number;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void; // Tambahkan prop onChange
 }
 
 function FormInput<
@@ -39,7 +40,7 @@ function FormInput<
   max,
   disabled,
   className,
-  onChange,
+  onChange, // Sekarang prop onChange sudah didefinisikan
 }: FormInputProps<TFieldValues, TName>) {
   return (
     <FormField
@@ -64,11 +65,13 @@ function FormInput<
               name={field.name}
               value={field.value ?? ''}
               onChange={(e) => {
+                field.onChange(e); // Panggil field.onChange untuk react-hook-form
                 if (onChange) {
-                  onChange(e);
+                  onChange(e); // Panggil custom onChange jika ada
                 }
               }}
               onBlur={field.onBlur}
+              ref={field.ref}
             />
           </FormControl>
           {description && <FormDescription>{description}</FormDescription>}

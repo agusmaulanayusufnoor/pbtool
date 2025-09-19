@@ -80,7 +80,7 @@ export default function ProductForm({
       <CardContent>
         <Form
           form={form}
-          onSubmit={form.handleSubmit(onSubmit)}
+          onSubmit={onSubmit} // Perbaikan: Mengubah form.handleSubmit(onSubmit) menjadi onSubmit
           className='space-y-8'
         >
           <FormFileUpload

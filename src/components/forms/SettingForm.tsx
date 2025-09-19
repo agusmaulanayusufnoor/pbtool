@@ -96,11 +96,7 @@ export default function SettingForm({
           </div>
         )}
 
-        <Form
-          form={form}
-          onSubmit={form.handleSubmit(onSubmit)}
-          className='space-y-8'
-        >
+        <Form form={form} onSubmit={onSubmit} className='space-y-8'>
           <FormInput
             control={form.control}
             name='userId'

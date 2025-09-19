@@ -7,30 +7,31 @@ import {
   Controller,
   FormProvider,
   useFormContext,
-  UseFormReturn,
   useFormState,
   type ControllerProps,
   type FieldPath,
-  type FieldValues
+  type FieldValues,
+  type UseFormReturn
 } from 'react-hook-form';
 
 import { cn } from '@/lib/utils';
 import { Label } from '@/components/ui/label';
 
-const Form = ({
+// Membuat komponen Form menjadi generik dan memperbaiki tipe onSubmit
+const Form = <TFormValues extends FieldValues>({
   children,
   onSubmit,
   form,
   className
 }: {
   children: React.ReactNode;
-  onSubmit: (data: any) => void;
-  form: UseFormReturn<any, any, undefined>;
+  onSubmit: (data: TFormValues) => void | Promise<void>; // Tipe ini sekarang menerima promise
+  form: UseFormReturn<TFormValues>;
   className?: string;
 }) => {
   return (
     <FormProvider {...form}>
-      <form onSubmit={onSubmit} className={className}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className={className}>
         {children}
       </form>
     </FormProvider>
