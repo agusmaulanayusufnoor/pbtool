@@ -6,14 +6,8 @@ import * as z from 'zod';
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { FormInput } from './form-input';
-import { useState } from 'react';
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardFooter
-} from '@/components/ui/card';
+import { useState, useEffect } from 'react';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 
 const schema = z.object({
   userId: z.string().min(1, 'ID wajib diisi'),
@@ -24,30 +18,63 @@ type SettingFormValues = z.infer<typeof schema>;
 
 interface SettingFormProps {
   onSaved: () => void;
+  initialData?: {
+    id: number;
+    userId: string;
+    cardNumber: string;
+    email: string;
+  } | null;
+  userEmail?: string;
 }
 
-export default function SettingForm({ onSaved }: SettingFormProps) {
+export default function SettingForm({
+  onSaved,
+  initialData,
+  userEmail
+}: SettingFormProps) {
   const [message, setMessage] = useState<string | null>(null);
 
   const form = useForm<SettingFormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
-      userId: '',
-      cardNumber: ''
+      userId: initialData?.userId || '',
+      cardNumber: initialData?.cardNumber || ''
     }
   });
 
+  // Reset form ketika initialData berubah
+  useEffect(() => {
+    if (initialData) {
+      form.reset({
+        userId: initialData.userId,
+        cardNumber: initialData.cardNumber
+      });
+    }
+  }, [initialData, form]);
+
   const onSubmit = async (values: SettingFormValues) => {
+    if (!userEmail) {
+      setMessage('Email tidak tersedia');
+      return;
+    }
+
     setMessage(null);
+
+    const dataToSend = {
+      email: userEmail,
+      userId: values.userId,
+      cardNumber: values.cardNumber
+    };
+
     const res = await fetch('/api/settings', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
-      body: JSON.stringify(values) // tidak perlu kirim email
+      body: JSON.stringify(dataToSend)
     });
+
     if (res.ok) {
       setMessage('Data berhasil disimpan!');
-      form.reset();
       onSaved();
     } else {
       const data = await res.json();
@@ -61,6 +88,14 @@ export default function SettingForm({ onSaved }: SettingFormProps) {
         <CardTitle>Setting</CardTitle>
       </CardHeader>
       <CardContent>
+        {userEmail && (
+          <div className='mb-4 rounded-md bg-gray-100 p-3'>
+            <p className='text-sm text-gray-600'>
+              <strong>Email:</strong> {userEmail}
+            </p>
+          </div>
+        )}
+
         <Form
           form={form}
           onSubmit={form.handleSubmit(onSubmit)}
@@ -69,9 +104,9 @@ export default function SettingForm({ onSaved }: SettingFormProps) {
           <FormInput
             control={form.control}
             name='userId'
-            label='ID'
+            label='User ID'
             required
-            placeholder='Masukkan ID'
+            placeholder='Masukkan User ID'
             onChange={(e) => {
               const value = e.target.value.toUpperCase();
               form.setValue('userId', value, { shouldValidate: true });
@@ -96,7 +131,13 @@ export default function SettingForm({ onSaved }: SettingFormProps) {
             {form.formState.isSubmitting ? 'Menyimpan...' : 'Simpan'}
           </Button>
           {message && (
-            <div className='mt-2 text-sm text-green-600'>{message}</div>
+            <div
+              className={`mt-2 text-sm ${
+                message.includes('berhasil') ? 'text-green-600' : 'text-red-600'
+              }`}
+            >
+              {message}
+            </div>
           )}
         </Form>
       </CardContent>

@@ -1,0 +1,10 @@
+onlyBuiltDependencies:
+  - '@clerk/shared'
+  - '@prisma/client'
+  - '@prisma/engines'
+  - '@sentry/cli'
+  - '@tailwindcss/oxide'
+  - prisma
+  - sharp
+  - sqlite3
+  - unrs-resolver

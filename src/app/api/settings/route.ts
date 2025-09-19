@@ -1,42 +1,80 @@
+// src/app/api/settings/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/prisma';
 
-export async function POST(req: NextRequest) {
+export async function GET(req: NextRequest) {
   try {
-    const { userId, cardNumber } = await req.json();
+    const url = new URL(req.url);
+    const email = url.searchParams.get('email');
 
-    const { userId: clerkUserId, sessionClaims } = auth();
-
-    if (!clerkUserId || !sessionClaims?.email) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (!email) {
+      return NextResponse.json(
+        { error: 'Email parameter required' },
+        { status: 400 }
+      );
     }
 
-    if (!userId || !cardNumber) {
-      return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
-    }
-
-    const email = sessionClaims.email as string;
-
-    const existing = await prisma.setting.findUnique({
+    const setting = await prisma.setting.findUnique({
       where: { email }
     });
 
-    let setting;
-    if (existing) {
-      setting = await prisma.setting.update({
-        where: { email },
-        data: { userId, cardNumber }
-      });
-    } else {
-      setting = await prisma.setting.create({
-        data: { userId, cardNumber, email }
-      });
+    // Return 404 dengan object kosong jika tidak ditemukan
+    if (!setting) {
+      return NextResponse.json({});
     }
 
     return NextResponse.json(setting);
   } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    console.error('GET /api/settings error:', error);
+    return NextResponse.json(
+      { error: 'Internal Server Error' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function POST(req: NextRequest) {
+  try {
+    const { email, userId, cardNumber } = await req.json();
+
+    if (!email) {
+      return NextResponse.json({ error: 'Email is required' }, { status: 400 });
+    }
+
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'User ID is required' },
+        { status: 400 }
+      );
+    }
+
+    if (!cardNumber) {
+      return NextResponse.json(
+        { error: 'Card number is required' },
+        { status: 400 }
+      );
+    }
+
+    // Upsert operation - update jika ada, create jika tidak ada
+    const setting = await prisma.setting.upsert({
+      where: { email },
+      update: {
+        userId,
+        cardNumber
+      },
+      create: {
+        email,
+        userId,
+        cardNumber
+      }
+    });
+
+    return NextResponse.json(setting);
+  } catch (error) {
+    console.error('POST /api/settings error:', error);
+    return NextResponse.json(
+      { error: 'Internal Server Error' },
+      { status: 500 }
+    );
   }
 }
