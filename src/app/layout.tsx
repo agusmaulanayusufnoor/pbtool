@@ -11,6 +11,7 @@ import NextTopLoader from 'nextjs-toploader';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import './globals.css';
 import './theme.css';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 const META_THEME_COLORS = {
   light: '#ffffff',
@@ -74,6 +75,7 @@ export default async function RootLayout({
               </Providers>
             </ThemeProvider>
           </NuqsAdapter>
+          <SpeedInsights />
         </body>
       </html>
     </ClerkProvider>
