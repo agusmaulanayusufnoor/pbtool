@@ -241,16 +241,14 @@ export default function GeneratePage() {
                   <div>
                     <span className='font-medium'>Format Header:</span>
                     <code className='mt-1 ml-2 block rounded bg-gray-100 px-2 py-1 text-xs'>
-                      1 + File Name (User ID) + Desc (6 spasi) + Tanggal (DD) +
-                      Bulan (MM) + Tahun (YYYY) + Jam (hh) + Menit (mm) + Detik
-                      (ss) + # of Record (6 digit)
+                      1 + File Name + Desc (14 spasi) + Tanggal (MMDDYYYY) + Time (HHMMSS) + # of Record (6 digit)
                     </code>
                   </div>
                   <div>
                     <span className='font-medium'>Format Detail:</span>
                     <code className='mt-1 ml-2 block rounded bg-gray-100 px-2 py-1 text-xs'>
                       Record Type (2) + Sequence Number (6 digit) + Card Number
-                      (16 digit) + Function (2 digit) + Amount (13 digit) + Date
+                      (16 digit) + Function (2 digit) + Amount (15 digit: 13 digit utama + 2 digit desimal 00) + Date
                       (MMDDYYYY) + Time (HHMMSS) + Check Sum (6 digit)
                     </code>
                   </div>
@@ -270,14 +268,15 @@ export default function GeneratePage() {
                   <div>
                     <span className='font-medium'>Contoh Output:</span>
                     <code className='mt-1 ml-2 block rounded bg-gray-100 px-2 py-1 text-xs'>
-                      1USERID123 08142025114000000001
+                      1CDCKRT              09222025153340000001
                       <br />
-                      200000116400558800789200100000100000000008142025114000000094
+                      200000146400558800789120100000500000000009222025153340000123
                     </code>
                     <p className='mt-1 text-xs text-gray-500'>
-                      * File Name (USERID123) diambil dari User ID di setting
-                      <br />* Nama file: FGUSERID1232509191635.txt
-                   
+                      * File Name (CDCKRT) diambil dari User ID di setting
+                      <br />* Desc: 14 spasi
+                      <br />* Tanggal header: MMDDYYYY (09222025 = September 22, 2025)
+                      <br />* Amount: 15 digit dengan 2 digit terakhir selalu '00'
                     </p>
                   </div>
                 </div>
