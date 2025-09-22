@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
     // Generate CDC file format sesuai aturan
     // Format Header: 1 + File Name + spasi + Desc (kosong) + Tanggal + Bulan + Tahun + Jam + Menit + Detik + # of Record
     const headerRecordCount = '000001'; // 6 digit, untuk 1 record
-    const headerDesc = ' '.repeat(6); // 6 karakter kosong untuk Desc
+    const headerDesc = ' '.repeat(14); // 14 karakter kosong untuk Desc (bukan 6)
 
     // Parse timestamp dari format DDMMYYYYHHMMSS
     const day = timestamp.date.substring(0, 2);
@@ -73,13 +73,17 @@ export async function POST(req: NextRequest) {
     const minutes = timestamp.time.substring(2, 4);
     const seconds = timestamp.time.substring(4, 6);
 
-    const header = `1${fileName} ${headerDesc}${day}${month}${year}${hours}${minutes}${seconds}${headerRecordCount}`;
+    const header = `1${fileName}${headerDesc}${day}${month}${year}${hours}${minutes}${seconds}${headerRecordCount}`;
 
     // Format Detail: Record Type + Sequence Number + Card Number + Function + Amount + Date + Time + Check Sum
     const recordType = '2';
     const sequenceNumber = '000001'; // 6 digit nomor urut
     const cardNumberPadded = cardNumber.padStart(16, '0'); // 16 digit
-    const amountPadded = amount.padStart(13, '0'); // 13 digit dengan 2 digit terakhir sebagai desimal
+    
+    // Amount: tambahkan '00' di akhir dan pad menjadi 13 digit
+    const amountWithDecimal = amount + '00'; // Tambahkan 00 di akhir amount
+    const amountPadded = amountWithDecimal.padStart(13, '0'); // 13 digit dengan 2 digit terakhir sebagai desimal
+    
     const dateMMDDYYYY = `${month}${day}${year}`; // MMDDYYYY
     const timeHHMMSS = timestamp.time;
 
@@ -132,9 +136,9 @@ export async function GET(req: NextRequest) {
     },
     format: 'CDC File Format dengan Header dan Detail',
     headerFormat:
-      '1 + File Name + Desc (6 spasi) + Tanggal (DDMMYYYY) + Time (HHMMSS) + # of Record (6 digit)',
+      '1 + File Name + Desc (14 spasi) + Tanggal (DDMMYYYY) + Time (HHMMSS) + # of Record (6 digit)',
     detailFormat:
-      'Record Type (2) + Sequence Number (6 digit) + Card Number (16 digit) + Function (2 digit) + Amount (13 digit) + Date (MMDDYYYY) + Time (HHMMSS) + Check Sum (6 digit)',
+      'Record Type (2) + Sequence Number (6 digit) + Card Number (16 digit) + Function (2 digit) + Amount (13 digit dengan 00 di akhir) + Date (MMDDYYYY) + Time (HHMMSS) + Check Sum (6 digit)',
     fileNameFormat: 'FG + KODE (6 digit) + DATE (YYMMDD) + TIME (HHMM).txt',
     functions: [
       { code: '01', description: 'New Limit' },
