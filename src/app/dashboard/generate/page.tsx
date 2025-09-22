@@ -168,7 +168,7 @@ export default function GeneratePage() {
 
           <div className='space-y-6'>
             {generateResult && (
-              <Card className='h-fit'>
+              <Card className='h-fit dark:bg-[#333446] dark:text-gray-200'>
                 <CardHeader>
                   <CardTitle>Hasil Generate</CardTitle>
                 </CardHeader>
@@ -209,7 +209,7 @@ export default function GeneratePage() {
             )}
 
             {!generateResult && (
-              <Card className='h-fit'>
+              <Card className='h-fit dark:bg-[#333446] dark:text-gray-200''>
                 <CardHeader>
                   <CardTitle>Preview Hasil</CardTitle>
                 </CardHeader>
@@ -232,7 +232,7 @@ export default function GeneratePage() {
             )}
 
             {/* Informasi card */}
-            <Card className='h-fit dark:bg-gray-800 dark:text-gray-200'>
+            <Card className='h-fit dark:bg-[#333446] dark:text-gray-200'>
               <CardHeader>
                 <CardTitle>Informasi Format CDC</CardTitle>
               </CardHeader>
