@@ -209,7 +209,7 @@ export default function GeneratePage() {
             )}
 
             {!generateResult && (
-              <Card className='h-fit dark:bg-[#333446] dark:text-gray-200''>
+              <Card className='h-fit dark:bg-[#333446] dark:text-gray-200'>
                 <CardHeader>
                   <CardTitle>Preview Hasil</CardTitle>
                 </CardHeader>
