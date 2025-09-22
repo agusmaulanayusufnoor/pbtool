@@ -84,7 +84,7 @@ export default function SettingsPage() {
       />
 
       <div className='mt-6'>
-        <Card>
+        <Card className='h-fit dark:bg-[#273F4F] dark:text-gray-200'>
           <CardHeader>
             <CardTitle>Data Setting</CardTitle>
           </CardHeader>
