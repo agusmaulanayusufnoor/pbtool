@@ -276,7 +276,7 @@ export default function GeneratePage() {
                       * File Name (CDCKRT) diambil dari User ID di setting
                       <br />* Desc: 14 spasi
                       <br />* Tanggal header: MMDDYYYY (09222025 = September 22, 2025)
-                      <br />* Amount: 15 digit dengan 2 digit terakhir selalu '00'
+                      <br />* Amount: 15 digit dengan 2 digit terakhir selalu &apos;00&apos;
                     </p>
                   </div>
                 </div>
