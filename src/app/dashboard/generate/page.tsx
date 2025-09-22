@@ -232,7 +232,7 @@ export default function GeneratePage() {
             )}
 
             {/* Informasi card */}
-            <Card className='h-fit'>
+            <Card className='h-fit dark:bg-gray-800 dark:text-gray-200'>
               <CardHeader>
                 <CardTitle>Informasi Format CDC</CardTitle>
               </CardHeader>
@@ -240,13 +240,13 @@ export default function GeneratePage() {
                 <div className='space-y-3 text-sm'>
                   <div>
                     <span className='font-medium'>Format Header:</span>
-                    <code className='mt-1 ml-2 block rounded bg-gray-100 px-2 py-1 text-xs'>
+                    <code className='mt-1 ml-2 block rounded bg-gray-100 px-2 py-1 text-xs dark:bg-gray-700'>
                       1 + File Name + Desc (14 spasi) + Tanggal (MMDDYYYY) + Time (HHMMSS) + # of Record (6 digit)
                     </code>
                   </div>
                   <div>
                     <span className='font-medium'>Format Detail:</span>
-                    <code className='mt-1 ml-2 block rounded bg-gray-100 px-2 py-1 text-xs'>
+                    <code className='mt-1 ml-2 block rounded bg-gray-100 px-2 py-1 text-xs dark:bg-gray-700'>
                       Record Type (2) + Sequence Number (6 digit) + Card Number
                       (16 digit) + Function (2 digit) + Amount (15 digit: 13 digit utama + 2 digit desimal 00) + Date
                       (MMDDYYYY) + Time (HHMMSS) + Check Sum (6 digit)
@@ -254,7 +254,7 @@ export default function GeneratePage() {
                   </div>
                   <div>
                     <span className='font-medium'>Format Nama File:</span>
-                    <code className='mt-1 ml-2 block rounded bg-gray-100 px-2 py-1 text-xs'>
+                    <code className='mt-1 ml-2 block rounded bg-gray-100 px-2 py-1 text-xs dark:bg-gray-700'>
                       FG + USER_ID (6 digit) + DATE (YYMMDD) + TIME (HHMM).txt
                     </code>
                   </div>
@@ -267,7 +267,7 @@ export default function GeneratePage() {
                   </div>
                   <div>
                     <span className='font-medium'>Contoh Output:</span>
-                    <code className='mt-1 ml-2 block rounded bg-gray-100 px-2 py-1 text-xs'>
+                    <code className='mt-1 ml-2 block rounded bg-gray-100 px-2 py-1 text-xs dark:bg-gray-700'>
                       1CDCKRT              09222025153340000001
                       <br />
                       200000146400558800789120100000500000000009222025153340000123
