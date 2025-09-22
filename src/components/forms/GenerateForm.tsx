@@ -130,7 +130,7 @@ export default function GenerateForm({
   };
 
   return (
-    <Card className='mx-auto max-w-md'>
+    <Card className='mx-auto max-w-md dark:bg-[#273F4F] dark:text-gray-200'>
       <CardHeader>
         <CardTitle>Generate Text</CardTitle>
       </CardHeader>
