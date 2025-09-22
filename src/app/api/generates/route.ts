@@ -88,7 +88,7 @@ export async function POST(req: NextRequest) {
     const timeHHMMSS = timestamp.time;
 
     // Hitung checksum (rumus penjumlahan kolom-kolom sebelumnya)
-    const checksumData = `${recordType}${sequenceNumber}${cardNumberPadded}${func}${amountPadded}${dateMMDDYYYY}${timeHHMMSS}`;
+    const checksumData = `${sequenceNumber}${cardNumberPadded}${func}${amountPadded}${dateMMDDYYYY}${timeHHMMSS}`;
     let checksum = 0;
     for (let i = 0; i < checksumData.length; i++) {
       checksum += parseInt(checksumData[i]) || 0;
